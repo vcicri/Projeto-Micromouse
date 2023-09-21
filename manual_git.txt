@@ -1,0 +1,66 @@
+https://github.com/git-guides/git-init (reference)
+
+-------------------------------------------------------------------------------------------
+
+
+Conectando ao repositorio (supondo que ja tenha um branch), duas formas, clonando o que já esta lá ou dando init, caso queira criar algo do zero pra lá:
+
+git remote add origin <URL>
+
+git clone <URL>
+
+
+-------------------------------------------------------------------------------------------
+	
+
+Switch Branch using git checkout:
+
+https://devconnected.com/how-to-switch-branch-on-git/ (reference)
+
+First, make sure that the target branch exists by running the “git branch” command.
+
+$ git branch
+
+The easiest way to switch branch on Git is to use the “git checkout” command and specify the name of the branch you want to switch to.
+
+If the destination branch does not exist, you have to append the “-b” option, otherwise you won’t be able to switch to that branch.
+
+$ git checkout <existing_branch>
+
+$ git checkout -b <new_branch>
+
+
+
+
+-------------------------------------------------------------------------------------------
+
+Como excluir uma pasta:
+
+1. Primeiro certifique-se que o seu repositório está sincronizado com o repositório remoto: 
+	$ git pull origin master, (supondo que o branch seja master).
+
+2. Então remova a pasta localmente: 
+	$ git rm -r Landing Email. (pastas a serem removidas 'Landing' e 'Email')
+
+3. Agora faça um commit das modificações: 
+	$ git commit -m "Remove pastas Landing e Email"
+
+4. Sincronize com repositório remoto: 
+	$ git push origin master
+	
+	
+-------------------------------------------------------------------------------------------
+	
+Criar/reescrever uma pasta/arquivo:
+
+1. Primeiro certifique-se que o seu repositório está sincronizado com o repositório remoto: 
+	$ git pull origin master, (supondo que o branch seja master).
+
+2. Então remova a pasta localmente: 
+	$ git add Nome_pasta. (apenas $ . para todos os arquivos/pastas ou file com o tipo de file, exemplo $ texto.txt)
+
+3. Agora faça um commit das modificações: 
+	$ git commit -m "primeira versão"
+
+4. Sincronize com repositório remoto: 
+	$ git push origin master (master -> nome do branch)
