@@ -29,6 +29,21 @@ $ git checkout <existing_branch>
 
 $ git checkout -b <new_branch>
 
+Creating new branch:
+
+First locally:
+
+$ git checkout -b <branchname>
+
+$ git pull origin <branchname>
+
+$ git add .
+
+$ git commit -m "v1.0"
+
+Push to git platform:
+
+$ git push origin -u <branchname>
 
 
 
