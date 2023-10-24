@@ -83,13 +83,13 @@ int main() {
     
     //caminho circular pré definido
     if(t >2.5){
-      target = 1.57;
+      target = M_PI/2;
     }
     if(t >5){
-      target = 3.14;
+      target = M_PI;
     }
     if(t > 7.5){
-      target = -1.57;
+      target = -M_PI/2;
     }
     if(t > 10){
       target = 0;
