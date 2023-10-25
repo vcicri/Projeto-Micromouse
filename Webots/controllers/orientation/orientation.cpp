@@ -25,7 +25,7 @@ void updateGyrol(int timeStep){
     if(orientation < -M_PI){
       orientation += 2*M_PI; 
     }
-  }
+}
 
 int main() {
 
@@ -51,11 +51,13 @@ int main() {
     updateGyrol(TIME_STEP);
     
     //escolhendo o formato do PID (um pra curvas abruscas e outro pra andar em linha reta)
-    if(abs(error) < 0.5){
+    if(abs(error) < 0.1){
       Kp = 15.0;
+      Ki=0.0;
       base_speed = 1.0*max_speed;
     }else{
-      Kp=4.0;
+      Kp=50.0;
+      Ki=0.0;
       base_speed = 0.0*max_speed;
     }
     
@@ -99,32 +101,47 @@ int main() {
     
     t += (double)TIME_STEP / 1000.0;
     
-    //caminho circular pré definido
-    if(t > 2){
-      if(t==2){
-        previous_target = target;
-      }
-      target = M_PI/2;
-    }
-    if(t > 4){
-      if(t==4){
+    //caminho ida e volta definido
+    if(t > 5){
+      if(t==5){
         previous_target = target;
       }
       target = M_PI;
     }
-    if(t > 6){
-      if(t==6){
-        previous_target = target;
-      }
-      target = -M_PI/2;
-    }
-    if(t > 8){
-      if(t==8){
+    if(t > 10){
+      if(t==10){
         previous_target = target;
       }
       target = 0;
       t=0;
     }
+    
+    //caminho circular pré definido
+    // if(t > 2){
+      // if(t==2){
+        // previous_target = target;
+      // }
+      // target = M_PI/2;
+    // }
+    // if(t > 4){
+      // if(t==4){
+        // previous_target = target;
+      // }
+      // target = M_PI;
+    // }
+    // if(t > 6){
+      // if(t==6){
+        // previous_target = target;
+      // }
+      // target = -M_PI/2;
+    // }
+    // if(t > 8){
+      // if(t==8){
+        // previous_target = target;
+      // }
+      // target = 0;
+      // t=0;
+    // }
     
     
   }

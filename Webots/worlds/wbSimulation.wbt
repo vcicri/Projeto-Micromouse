@@ -1,0 +1,58 @@
+#VRML_SIM R2023b utf8
+
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/backgrounds/protos/TexturedBackground.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/appearances/protos/RoughPolymer.proto"
+
+WorldInfo {
+}
+Viewpoint {
+  orientation -0.43263606320075565 0.547927995924962 0.7159615549034786 1.171129330339052
+  position -0.57797392879816 -0.5693041878761202 1.3427990510527161
+}
+TexturedBackground {
+}
+TexturedBackgroundLight {
+}
+Solid {
+  rotation 1 0 0 1.5708
+  children [
+    Shape {
+      appearance RoughPolymer {
+        baseColor 0.694118 0.694118 0.694118
+      }
+      geometry DEF maze Mesh {
+        url [
+          "../Parts/maze1.obj"
+        ]
+      }
+    }
+  ]
+  name "Maze"
+  boundingObject USE maze
+}
+Robot {
+  translation 0 0 0.64
+  children [
+    Solid {
+      children [
+        CadShape {
+          url [
+            "../Parts/Montagem Final 21.10 v10 body.obj"
+          ]
+        }
+      ]
+      name "body"
+    }
+    Solid {
+      children [
+        CadShape {
+          url [
+            "../Parts/Montagem Final 21.10 v6 wheel.obj"
+          ]
+        }
+      ]
+      name "wheel1"
+    }
+  ]
+}
