@@ -43,14 +43,14 @@ double selectDirection(double current_angle){
   }else{
     direction = M_PI;
   }
+  
   double final_direction = direction + current_angle;
   if(final_direction > M_PI){
     final_direction -= 2 * M_PI;
   }else if (final_direction < -M_PI){
     final_direction += 2 * M_PI;
   }
-  return final_direction;
-  
+  return final_direction; 
 }
 
 int main() {
@@ -61,6 +61,7 @@ int main() {
   //double base_speed = 0.0;
   double speed=max_speed * 0.5;
  
+ //fazendo enable nos sensores
   for(int i = 0; i < 3; i++){
     ds[i] = robot->getDistanceSensor(dsNames[i]);
     ds[i]->enable(TIME_STEP);;
@@ -78,6 +79,7 @@ int main() {
     motor2->setVelocity(speed);
     motor1->setVelocity(speed);
     
+    //fazendo a leitura nos sensores
     for(int i = 0; i < 3; i++){
       dsValues[i] = ds[i]->getValue()/100;
     }
