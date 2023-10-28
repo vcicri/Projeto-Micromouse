@@ -1,8 +1,16 @@
 # Projeto Micromouse
 
-Este projeto Micromouse é desenvolvido em Webots e inclui implementações de controle PID para orientação e navegação do robô.
+Este projeto Micromouse é desenvolvido em Webots e inclui implementações de controle PID para orientação, navegação e resolução de labirintos do robô.
 
 ## Versões
+
+### Versão 4.0
+- Data: 25/10/2023
+
+#### Mudanças
+
+- Integração dos algoritmos de orientação e navegação.
+- Adaptação do robô para realizar curvas com base nas informações das paredes do labirinto.
 
 ### Versão 3.0
 - Data: 25/10/2023
@@ -43,7 +51,7 @@ Para utilizar este projeto, siga as etapas abaixo:
 2. Abra o projeto no Webots e execute o código fornecido no controlador do robô.
 3. Observe o comportamento do robô ao seguir direções de forma eficaz com base no controle PID implementado.
 
-## Autor
+## Autores
 
 - Luan Alflen
 - Lucas Keller

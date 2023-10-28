@@ -15,8 +15,8 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  orientation -0.3225782811560239 0.3749684032220792 0.8691041071767579 1.5604667325222943
-  position -0.21124545229768277 -1.4949625129187059 1.3076671187139859
+  orientation -0.5773502691896257 0.5773502691896257 0.5773502691896257 2.0943245915045035
+  position 0.3 -0.125 1.9019215272335301
 }
 TexturedBackground {
 }
@@ -27,7 +27,7 @@ RectangleArena {
   floorSize 20 10
 }
 Robot {
-  translation 0 0.125 0.04
+  translation 0.3 -0.125 0.04
   children [
     DistanceSensor {
       translation -0.01 -0.04 0
@@ -221,7 +221,7 @@ Robot {
   }
   physics Physics {
   }
-  controller "navegation"
+  controller "maze_solution_algorithm"
 }
 Solid {
   translation -0.2 0 0.05
@@ -234,6 +234,22 @@ Solid {
       }
     }
   ]
+  boundingObject USE wall1
+  physics Physics {
+  }
+}
+Solid {
+  translation -0.8 0 0.05
+  children [
+    DEF wall1 Shape {
+      appearance PBRAppearance {
+      }
+      geometry Box {
+        size 0.02 2 0.1
+      }
+    }
+  ]
+  name "solid(5)"
   boundingObject USE wall1
   physics Physics {
   }
@@ -268,6 +284,23 @@ Solid {
     }
   ]
   name "solid(2)"
+  boundingObject USE wall1
+  physics Physics {
+  }
+}
+Solid {
+  translation 0.809 -0.5 0.05
+  rotation 0 0 1 1.5708
+  children [
+    DEF wall1 Shape {
+      appearance PBRAppearance {
+      }
+      geometry Box {
+        size 0.02 2 0.1
+      }
+    }
+  ]
+  name "solid(6)"
   boundingObject USE wall1
   physics Physics {
   }
