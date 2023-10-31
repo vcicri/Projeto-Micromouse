@@ -1,0 +1,283 @@
+#VRML_SIM R2023b utf8
+
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/backgrounds/protos/TexturedBackground.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/floors/protos/CircleArena.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/appearances/protos/Plastic.proto"
+
+WorldInfo {
+  basicTimeStep 16
+  contactProperties [
+    DEF roda_boba_material ContactProperties {
+      material2 "roda_boba_material"
+      coulombFriction [
+        0
+      ]
+    }
+  ]
+}
+Viewpoint {
+  orientation -0.4762645928819018 0.48820625815786817 0.73131845803489 1.8576425965964247
+  position 0.4276050716967387 -1.3179718786156966 1.9306271841034695
+}
+TexturedBackground {
+}
+TexturedBackgroundLight {
+}
+Robot {
+  translation 0.502844 -0.5094 0.0458407
+  rotation 0.6992230152619409 0.2726960059521358 0.6608510144243952 0.00121241
+  children [
+    Gyro {
+      translation 0.02 -0.022 0.033
+    }
+    DistanceSensor {
+      translation -0.063 0.0003 0.0012
+      rotation 0 0 1 3.141592
+      name "distanceSensor1"
+      lookupTable [
+        0 0 0
+        0.8 800 0.035
+      ]
+      type "sonar"
+    }
+    DistanceSensor {
+      translation -0.0331 -0.0396 0
+      rotation 0 0 1 -2.3562
+      name "distanceSensor2"
+      lookupTable [
+        0 0 0
+        0.8 800 0.035
+      ]
+      type "sonar"
+    }
+    DistanceSensor {
+      translation -0.0331 0.0396 0
+      rotation 0 0 1 2.3562
+      name "distanceSensor3"
+      lookupTable [
+        0 0 0
+        0.8 800 0.035
+      ]
+      type "sonar"
+    }
+    Group {
+      children [
+        Solid {
+          translation -0.06 0 0
+          children [
+            Pose {
+              translation 0.048 -0.013 -0.0133
+              rotation 0.5773489358556708 0.5773509358554485 0.5773509358554485 2.0944
+              children [
+                DEF sensor CadShape {
+                  url [
+                    "../Parts/Montagem Final 21.10 v7 sensor.obj"
+                  ]
+                }
+              ]
+            }
+          ]
+          name "sensor1"
+          boundingObject DEF sensorBO Box {
+            size 0.013 0.048 0.031
+          }
+          physics DEF physics_Sensor Physics {
+          }
+        }
+        Solid {
+          translation -0.0331 -0.0396 0
+          rotation 0 0 1 0.7854
+          children [
+            Pose {
+              translation 0.048 -0.013 -0.0133
+              rotation 0.5773489358556708 0.5773509358554485 0.5773509358554485 2.0944
+              children [
+                USE sensor
+              ]
+            }
+          ]
+          name "sensor2"
+          boundingObject USE sensorBO
+          physics USE physics_Sensor
+        }
+        Solid {
+          translation -0.0331 0.0396 0
+          rotation 0 0 1 -0.7854
+          children [
+            Pose {
+              translation 0.048 -0.013 -0.0133
+              rotation 0.5773489358556708 0.5773509358554485 0.5773509358554485 2.0944
+              children [
+                USE sensor
+              ]
+            }
+          ]
+          name "sensor3"
+          boundingObject USE sensorBO
+          physics USE physics_Sensor
+        }
+        BallJoint {
+          jointParameters BallJointParameters {
+            anchor -0.027870997249746867 0.0001610450457207897 -0.030606030849649118
+          }
+          jointParameters2 JointParameters {
+            axis 1 0 0
+          }
+          jointParameters3 JointParameters {
+          }
+          endPoint Solid {
+            translation -0.027870997249746867 0.0001610450457207897 -0.030606030849649118
+            boundingObject Sphere {
+              radius 0.0055
+            }
+            physics Physics {
+            }
+          }
+        }
+        HingeJoint {
+          jointParameters HingeJointParameters {
+            axis 0 -1 0
+            anchor 0.0285 0.04044 -0.0181
+          }
+          device [
+            RotationalMotor {
+              name "motor_1"
+            }
+          ]
+          endPoint Solid {
+            translation 0.0285 0.04044 -0.0181
+            rotation 1 0 0 1.5707999999999998
+            children [
+              Pose {
+                translation -0.0405 0.0046 0.0535
+                rotation 0 1 0 1.57
+                children [
+                  DEF wheel CadShape {
+                    url [
+                      "../Parts/Montagem Final 21.10 v6 wheel.obj"
+                    ]
+                  }
+                ]
+              }
+            ]
+            name "motor1"
+            boundingObject DEF wheelBO Shape {
+              appearance PBRAppearance {
+                baseColor 0.2 0.2 1
+                roughness 1
+                metalness 0
+              }
+              geometry Cylinder {
+                height 0.006
+                radius 0.017
+              }
+            }
+            physics DEF wheel_physics2 Physics {
+            }
+          }
+        }
+        HingeJoint {
+          jointParameters HingeJointParameters {
+            axis 0 -1 0
+            anchor 0.0285 -0.0399 -0.0181
+          }
+          device [
+            RotationalMotor {
+              name "motor_2"
+            }
+          ]
+          endPoint Solid {
+            translation 0.0285 -0.0399 -0.0181
+            rotation 0.9999999999999999 0 0 1.5707953071795862
+            children [
+              Pose {
+                translation 0.0404 0.0045 -0.0534
+                rotation 0 -1 0 1.57
+                children [
+                  USE wheel
+                ]
+              }
+            ]
+            name "motor2"
+            boundingObject USE wheelBO
+            physics USE wheel_physics2
+          }
+        }
+        Solid {
+          children [
+            Pose {
+              translation -0.012 -0.013 -0.0135
+              rotation 0.5773509358554485 0.5773489358556708 0.5773509358554485 2.0944
+              children [
+                CadShape {
+                  url [
+                    "../Parts/Montagem Final 21.10 v10 body.obj"
+                  ]
+                }
+              ]
+            }
+          ]
+          name "body"
+          boundingObject DEF shape_body Shape {
+            appearance PBRAppearance {
+              roughness 1
+              metalness 0
+            }
+            geometry Box {
+              size 0.0945 0.07 0.05
+            }
+          }
+          physics Physics {
+          }
+        }
+      ]
+    }
+  ]
+  boundingObject USE shape_body
+  physics Physics {
+  }
+  controller "orientation"
+}
+Solid {
+  translation 1.29306 0.00141224 0.129585
+  children [
+    DEF esfera Shape {
+      appearance PBRAppearance {
+        baseColor 0.7 1 0.5
+      }
+      geometry DEF sphereBO Sphere {
+        radius 0.05
+        subdivision 2
+      }
+    }
+  ]
+  boundingObject USE sphereBO
+  physics Physics {
+  }
+}
+Solid {
+  rotation 1 0 0 1.57
+  children [
+    DEF maze Shape {
+      appearance Plastic {
+        colorOverride 0.854902 0.854902 0.854902
+        type "padded"
+        textureTransform TextureTransform {
+          center 0.366 0.113
+          scale 1.679 1.679
+        }
+      }
+      geometry DEF mazeGeo Mesh {
+        url [
+          "../Parts/maze1.obj"
+        ]
+      }
+    }
+  ]
+  name "maze"
+  boundingObject USE maze
+}
+CircleArena {
+  translation 2.1 0 0
+}
