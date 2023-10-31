@@ -4,6 +4,15 @@ Este projeto Micromouse é desenvolvido em Webots e inclui implementações de c
 
 ## Versões
 
+### Versão 5.0.4.0
+
+- Data: 30/10/2023
+
+#### Mudanças
+
+- novo arquivo world (prototipo1) em que o robo com e labirinto funcionando com os controladores disponíveis. 
+- Criado o .gitignore para que não sejam compartilhados arquivos .exe e da pasta build
+
 ### Versão 4.0
 - Data: 25/10/2023
 

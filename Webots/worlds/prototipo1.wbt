@@ -17,16 +17,16 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  orientation -0.4762645928819018 0.48820625815786817 0.73131845803489 1.8576425965964247
-  position 0.4276050716967387 -1.3179718786156966 1.9306271841034695
+  orientation -0.3918979196924647 0.3255543898604192 0.8604826318894117 1.9035673322646058
+  position 0.6549164534117666 -0.9011564777334027 0.4799642320349094
 }
 TexturedBackground {
 }
 TexturedBackgroundLight {
 }
 Robot {
-  translation 0.502844 -0.5094 0.0458407
-  rotation 0.6992230152619409 0.2726960059521358 0.6608510144243952 0.00121241
+  translation 0.558166 -0.509277 0.0346196
+  rotation -0.058610539487829176 0.9966635172059078 0.05680350457229612 0.013350710116789745
   children [
     Gyro {
       translation 0.02 -0.022 0.033
@@ -34,30 +34,30 @@ Robot {
     DistanceSensor {
       translation -0.063 0.0003 0.0012
       rotation 0 0 1 3.141592
-      name "distanceSensor1"
+      name "distance_sensor1"
       lookupTable [
         0 0 0
-        0.8 800 0.035
+        0.3 3000 0.01
       ]
       type "sonar"
     }
     DistanceSensor {
-      translation -0.0331 -0.0396 0
-      rotation 0 0 1 -2.3562
-      name "distanceSensor2"
+      translation -0.022 -0.04 0
+      rotation 0 0 1 -1.5707953071795862
+      name "distance_sensor2"
       lookupTable [
         0 0 0
-        0.8 800 0.035
+        0.3 3000 0.01
       ]
       type "sonar"
     }
     DistanceSensor {
-      translation -0.0331 0.0396 0
-      rotation 0 0 1 2.3562
-      name "distanceSensor3"
+      translation -0.022 0.04 0
+      rotation 0 0 1 1.5707996938995747
+      name "distance_sensor3"
       lookupTable [
         0 0 0
-        0.8 800 0.035
+        0.3 3000 0.01
       ]
       type "sonar"
     }
@@ -86,8 +86,8 @@ Robot {
           }
         }
         Solid {
-          translation -0.0331 -0.0396 0
-          rotation 0 0 1 0.7854
+          translation -0.022 -0.044 0
+          rotation 0 0 1 1.5708
           children [
             Pose {
               translation 0.048 -0.013 -0.0133
@@ -102,8 +102,8 @@ Robot {
           physics USE physics_Sensor
         }
         Solid {
-          translation -0.0331 0.0396 0
-          rotation 0 0 1 -0.7854
+          translation -0.022 0.044 0
+          rotation 0 0 1 -1.5707953071795862
           children [
             Pose {
               translation 0.048 -0.013 -0.0133
@@ -119,15 +119,19 @@ Robot {
         }
         BallJoint {
           jointParameters BallJointParameters {
+            position -0.003975908139645155
             anchor -0.027870997249746867 0.0001610450457207897 -0.030606030849649118
           }
           jointParameters2 JointParameters {
+            position -0.6940397210395445
             axis 1 0 0
           }
           jointParameters3 JointParameters {
+            position -6.284750789589705
           }
           endPoint Solid {
             translation -0.027870997249746867 0.0001610450457207897 -0.030606030849649118
+            rotation 0.004714018808822366 0.9999888733977699 0.0001763726994635819 5.589136076765812
             boundingObject Sphere {
               radius 0.0055
             }
@@ -137,6 +141,7 @@ Robot {
         }
         HingeJoint {
           jointParameters HingeJointParameters {
+            position 2.143849387979806
             axis 0 -1 0
             anchor 0.0285 0.04044 -0.0181
           }
@@ -147,7 +152,7 @@ Robot {
           ]
           endPoint Solid {
             translation 0.0285 0.04044 -0.0181
-            rotation 1 0 0 1.5707999999999998
+            rotation 0.35950265350057925 -0.6598312828495985 0.6598337065496848 2.4513645417431826
             children [
               Pose {
                 translation -0.0405 0.0046 0.0535
@@ -179,6 +184,7 @@ Robot {
         }
         HingeJoint {
           jointParameters HingeJointParameters {
+            position 2.1438493891513937
             axis 0 -1 0
             anchor 0.0285 -0.0399 -0.0181
           }
@@ -189,7 +195,7 @@ Robot {
           ]
           endPoint Solid {
             translation 0.0285 -0.0399 -0.0181
-            rotation 0.9999999999999999 0 0 1.5707953071795862
+            rotation 0.35950191854592456 -0.6598330313042711 0.6598323585287525 2.451362855436567
             children [
               Pose {
                 translation 0.0404 0.0045 -0.0534
@@ -237,10 +243,11 @@ Robot {
   boundingObject USE shape_body
   physics Physics {
   }
-  controller "orientation"
+  controller "navegation"
 }
 Solid {
-  translation 1.29306 0.00141224 0.129585
+  translation 0.80306 -0.707513 0.0501463
+  rotation -1 4.1592162171121035e-13 3.336453725953092e-16 0.02185795843225637
   children [
     DEF esfera Shape {
       appearance PBRAppearance {
