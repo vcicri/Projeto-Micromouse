@@ -102,46 +102,46 @@ int main() {
     t += (double)TIME_STEP / 1000.0;
     
     //caminho ida e volta definido
-    if(t > 5){
-      if(t==5){
-        previous_target = target;
-      }
-      target = M_PI;
-    }
-    if(t > 10){
-      if(t==10){
-        previous_target = target;
-      }
-      target = 0;
-      t=0;
-    }
-    
-    //caminho circular pré definido
-    // if(t > 2){
-      // if(t==2){
-        // previous_target = target;
-      // }
-      // target = M_PI/2;
-    // }
-    // if(t > 4){
-      // if(t==4){
+    // if(t > 5){
+      // if(t==5){
         // previous_target = target;
       // }
       // target = M_PI;
     // }
-    // if(t > 6){
-      // if(t==6){
-        // previous_target = target;
-      // }
-      // target = -M_PI/2;
-    // }
-    // if(t > 8){
-      // if(t==8){
+    // if(t > 10){
+      // if(t==10){
         // previous_target = target;
       // }
       // target = 0;
       // t=0;
     // }
+    
+    // //caminho circular pré definido
+    if(t > 2){
+      if(t==2){
+        previous_target = target;
+      }
+      target = M_PI/2;
+    }
+    if(t > 4){
+      if(t==4){
+        previous_target = target;
+      }
+      target = M_PI;
+    }
+    if(t > 6){
+      if(t==6){
+        previous_target = target;
+      }
+      target = -M_PI/2;
+    }
+    if(t > 8){
+      if(t==8){
+        previous_target = target;
+      }
+      target = 0;
+      t=0;
+    }
     
     
   }
