@@ -34,11 +34,11 @@ void updateGyrol(int timeStep){
 
 double selectDirection(double current_angle){
   double direction = 0.0;
-  if(dsValues[0] >= 8){
+  if(dsValues[0] >= 15){
     direction = M_PI/2;
-  }else if(dsValues[1] >= 8){
+  }else if(dsValues[1] >= 15){
     direction = 0;
-  }else if(dsValues[2] >= 8){
+  }else if(dsValues[2] >= 15){
     direction = -M_PI/2;    
   }else{
     direction = M_PI;
@@ -83,8 +83,6 @@ int main() {
     for(int i = 0; i < 3; i++){
       dsValues[i] = ds[i]->getValue()/100;
     }
-    
-    
     
     std::cout << "-----------------------------------------------------------------" << std::endl;
     std::cout << "t: " << t << std::endl;

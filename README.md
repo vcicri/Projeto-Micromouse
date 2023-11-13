@@ -4,14 +4,26 @@ Este projeto Micromouse é desenvolvido em Webots e inclui implementações de c
 
 ## Versões
 
+### Versão 6.0.5.1
+
+- Data: 12/11/2023
+
+#### Mudanças
+
+- Adição do algoritmo anticolisão (anti_colision.cpp) que utiliza apenas informações dos sensores ultrassônicos para manter o robô no centro do caminho.
+- Integração do algoritmo anticolisão ao algoritmo geral (maze_solution_algorithm.cpp), representado por três estados conforme definido no diagrama de estados ![Diagrama de Estados](Imagens/Diagrama_de_estados_Integrador_II.png).
+  - **Anticolisão:** Utiliza informações dos sensores ultrassônicos para manter o robô no centro do caminho. Parte do código também define a direção a ser virada.
+  - **Pra Frente:** Parte do código sem controle que faz o robô avançar por um período de tempo determinado.
+  - **Virar:** Implementação de PID que utiliza o giroscópio para girar o robô no próprio eixo.
+
 ### Versão 5.0.4.0
 
 - Data: 30/10/2023
 
 #### Mudanças
 
-- novo arquivo world (prototipo1) em que o robo com e labirinto funcionando com os controladores disponíveis. 
-- Criado o .gitignore para que não sejam compartilhados arquivos .exe e da pasta build
+- Novo arquivo world (prototipo1) em que o robô e labirinto funcionam com os controladores disponíveis.
+- Criação do .gitignore para que não sejam compartilhados arquivos .exe e da pasta build.
 
 ### Versão 4.0
 - Data: 25/10/2023

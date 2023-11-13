@@ -17,10 +17,16 @@ Gyro *gyro = robot->getGyro("gyro");
 DistanceSensor *ds[3];
 
 
+const int CURVE = 0;
+const int RUN = 1;
+const int ANTICOLISION = 2;
+//const double DELAY = 1.1;
+
 char dsNames[3][20] = {"distance_sensor1", "distance_sensor2", "distance_sensor3"};//esq, centro, dir
 double dsValues[3];//em centímetros
 double orientation = 0.0;
 double target = 0, previous_target=0.0;//previous não usando pra nada ainda nesse código
+double run_delay = 1.0;
 
 void updateGyrol(int timeStep){
     orientation += (timeStep / 1000.0) * gyro->getValues()[2];
@@ -34,11 +40,11 @@ void updateGyrol(int timeStep){
 
 double selectDirection(double current_target){
   double direction = 0.0;
-  if(dsValues[0] >= 8){
+  if(dsValues[0] >= 10){
     direction = M_PI/2;
-  }else if(dsValues[1] >= 8){
+  }else if(dsValues[1] >= 10){
     direction = 0;
-  }else if(dsValues[2] >= 8){
+  }else if(dsValues[2] >= 10){
     direction = -M_PI/2;    
   }else{
     direction = M_PI;
@@ -53,17 +59,37 @@ double selectDirection(double current_target){
   return final_direction; 
 }
 
+void consolePrint(double t_, double turning_delay_, double identified_curve_time_, double step_, double new_direction_, double error_, double error_sensors_, double Kp_){
+
+    std::cout << "-----------------------------------------------------------------" << std::endl;
+    std::cout << "t: " << t_ << ", t_delay: " << turning_delay_ << ", t_id: " << identified_curve_time_;
+    if(step_ == CURVE){
+      std::cout << ", step: CURVE" << std::endl;
+    }else if(step_ == RUN){
+      std::cout << ", step: RUN" << std::endl;
+    }else if(step_ == ANTICOLISION){
+      std::cout << ", step: ANTICOLISION" << std::endl;
+    }
+    
+    std::cout << "Target: " << target << ", P_target: " << previous_target << " rad, orientation: " << orientation << " rad, new_dire: " << new_direction_ << " rad"<< std::endl;
+    std::cout << "s1: " << dsValues[0] << ", s2: " << dsValues[1] << ", s3: " << dsValues[2] << std::endl;
+    std::cout << "dif_angle: " << abs(previous_target - target) << ", error_gyro: " << error_ << ", dif_sensors: " << error_sensors_ << ", Kp: " << Kp_ << std::endl;
+  
+
+}
+
 int main() {
 
   //const double F = 2.0;   // frequency 2 Hz
-  double t = 0.0, turning_delay=0.0, reset_delay=0;         // elapsed simulation time
+  double t = 0.0, turning_delay=99.0, identified_curve_time=0.0;         // elapsed simulation time
   double max_speed = 8.37758;
   double base_speed = 0.0;
   double right_speed=0.0, left_speed=0.0;
-  double error = 0.0, sum_error=0.0;
-  double Kp=15.0, Ki=0.1;
+  double error = 0.0, sum_error=0.0, error_sensors=0.0, sum_error_sensors=0.0;
+  double Kp=15.0, Ki=0.0;
   double proportional=0.0, integral=0.0;
   double new_direction = 0.0;
+  int step = CURVE, next_step=CURVE; //0->Virando, 1->Indo pra frente por X seg, 2->Anticolisão (linha reta)
   
    //fazendo o enable nos sensores
   for(int i = 0; i < 3; i++){
@@ -80,7 +106,6 @@ int main() {
   
 
   while (robot->step(TIME_STEP) != -1) {
-    updateGyrol(TIME_STEP);
     //fazendo a leitura nos sensores
     for(int i = 0; i < 3; i++){
       dsValues[i] = ds[i]->getValue()/100;
@@ -88,130 +113,162 @@ int main() {
     
     //codicão inicial
     if(t == 0){
-    std::cout << "condição inicial: " << target << std::endl;
+      step = ANTICOLISION;
+    
+      std::cout << "condição inicial: " << target << std::endl;
       std::cout << "target: " << target << std::endl;
       target = selectDirection(target);
       std::cout << "target após selectDirection: " << target << std::endl;
+      consolePrint(t, turning_delay, identified_curve_time, step, new_direction, error, error_sensors, Kp);
     }
     
     
     //escolhendo o formato do PID (um pra curvas abruscas e outro pra andar em linha reta)
-    if(abs(error) < 0.1){
-      Kp = 15.0;
-      Ki=0.0;
-      base_speed = 1.0*max_speed;
-    }else{
+    if(step == RUN){
+    
+      if(next_step == CURVE){
+        run_delay = 0.85;
+      }else{
+        run_delay = 0.85;
+      }
+      
+      if(turning_delay > run_delay){
+        identified_curve_time = t;
+        step = next_step;
+      }
+      Kp = 0.0;
+      Ki = 0.0;
+      
+      if(dsValues[1] <= 4.0){
+        base_speed = 0.0*max_speed;
+      }else{     
+        base_speed = 1.0*max_speed;
+      }
+      right_speed = base_speed;
+      left_speed = base_speed;
+      
+    //--------------------------------------------------
+    }else if (step == CURVE){
+    
+      updateGyrol(TIME_STEP);
+      //corrigindo erro pra não ter mudanças bruscas
+      error = target - orientation;
+      if (error > M_PI) {
+          error -= 2 * M_PI;
+      } else if (error < -M_PI) {
+          error += 2 * M_PI;
+      }
+                 
       Kp=50.0;
       Ki=0.0;
       base_speed = 0.0*max_speed;
+      
+      // Cálculo do erro integrador
+      sum_error += error;
+      integral = Ki * sum_error;
+      
+      proportional = Kp * error;
+      right_speed = base_speed + proportional + integral;
+      left_speed = base_speed - proportional - integral; 
+      
+      if(abs(error) < 0.01){
+        step = RUN;
+        next_step = ANTICOLISION;
+        turning_delay = 0;
+        
+        orientation=0;
+        target = 0;//pois o angulo do giroscopio é resetado
+        new_direction = 0;//-------------------- isso muda algo?
+      }
+      
+       
+    //--------------------------------------------------
+    }else if(step == ANTICOLISION){
+      Kp = 1.2;
+      Ki=0.0;
+      base_speed = 0.8*max_speed;
+      error_sensors = dsValues[0] - 7; //7 == (distancia de labirinto - largura do robo) / 2
+      
+      // Cálculo do erro integrador
+      sum_error_sensors += error_sensors;
+      integral = Ki * sum_error_sensors;
+      proportional = Kp * error_sensors;
+      
+      right_speed = base_speed + proportional + integral;
+      left_speed = base_speed - proportional - integral; 
+      
+      if(dsValues[0] >= 15){
+        new_direction = M_PI/2;
+      }else if(dsValues[1] >= 15){
+        new_direction = 0;
+      }else if(dsValues[2] >= 15){
+        new_direction = -M_PI/2;    
+      }else{
+        new_direction = M_PI;
+      }
+      std::cout << "--target: " << target << ", new_direction: " << new_direction << std::endl;
+      if(target != new_direction){
+        turning_delay = 0;
+        step = RUN;
+        target = new_direction;
+        next_step = CURVE;
+        right_speed = base_speed;
+        left_speed = base_speed; 
+        // identified_curve_time = t - 1.0;
+      }
+      
+      // if((t - identified_curve_time) > 1.0){
+        // step = RUN;
+      // }
+      
+         
     }
     
-    //corregindo erro pra não ter mudanças bruscas
-    error = target - orientation;
-    if (error > M_PI) {
-        error -= 2 * M_PI;
-    } else if (error < -M_PI) {
-        error += 2 * M_PI;
-    }
-    
-    // Cálculo do erro integrador
-    sum_error += error;
-    integral = Ki * sum_error;
-    
-    proportional = Kp * error;
-    right_speed = base_speed + proportional + integral;
-    left_speed = base_speed - proportional - integral;
-    
-    //limitando a velocidade
-    if(left_speed > max_speed){
-      left_speed = max_speed;
-    }
-    if(left_speed < -max_speed){
-      left_speed = -max_speed;
-    }
-    if(right_speed > max_speed){
-      right_speed   = max_speed;
-    }
-    if(right_speed < -max_speed){
-      right_speed = -max_speed;
-    }
+    // if(turning_delay > 1.1){
+      // new_direction = selectDirection(target);
+    // }
     
     
-    if(turning_delay > 1.2){
-      new_direction = selectDirection(target);
-    }
+    // if(new_direction != target and reset_delay == 0){
+      // turning_delay = 0.0;
+      // reset_delay = 1.0;
+    // }
+    
+    // if(new_direction != target and turning_delay > 1.1){
+      // previous_target = target;
+      // target = new_direction;
+      // reset_delay = 0.0;
+      // turning_delay = 0.0;
+    // }
     
     
-    if(new_direction != target and reset_delay == 0){
-      turning_delay = 0.0;
-      reset_delay = 1.0;
-    }
     
-    if(new_direction != target and turning_delay > 1.2){
-      previous_target = target;
-      target = new_direction;
-      reset_delay = 0.0;
-      turning_delay = 0.0;
-    }
-    if(dsValues[1] <= 5.5 and target != new_direction){
+    //Passa os valores para os motores
+    if(dsValues[1] <= 4 and target == 999.0/*new_direction*/){
       motor2->setVelocity(0);
       motor1->setVelocity(0);
     }else{
+      //limitando a velocidade
+      if(left_speed > max_speed){
+        left_speed = max_speed;
+      }
+      if(left_speed < -max_speed){
+        left_speed = -max_speed;
+      }
+      if(right_speed > max_speed){
+        right_speed   = max_speed;
+      }
+      if(right_speed < -max_speed){
+        right_speed = -max_speed;
+      }
       motor2->setVelocity(left_speed);
       motor1->setVelocity(right_speed);
     }
     
-    
-    std::cout << "-----------------------------------------------------------------" << std::endl;
-    std::cout << "t: " << t << ", t_delay: " << turning_delay <<std::endl;
-    std::cout << "Target: " << target << ", P_target: " << previous_target << " rad, orientation: " << orientation << " rad, new_dire: " << new_direction << " rad"<< std::endl;
-    std::cout << "s1: " << dsValues[0] << ", s2: " << dsValues[1] << ", s3: " << dsValues[2] << std::endl;
-    std::cout << "dif: " << abs(previous_target - target) << ", error: " << error << ", Kp: " << Kp << std::endl;
-    
+    consolePrint(t, turning_delay, identified_curve_time, step, new_direction, error, error_sensors, Kp);   
     t += (double)TIME_STEP / 1000.0;
     turning_delay += (double)TIME_STEP / 1000.0;
-    //caminho ida e volta definido
-    // if(t > 5){
-      // if(t==5){
-        // previous_target = target;
-      // }
-      // target = M_PI;
-    // }
-    // if(t > 10){
-      // if(t==10){
-        // previous_target = target;
-      // }
-      // target = 0;
-      // t=0;
-    // }
-    
-    //caminho circular pré definido
-    // if(t > 2){
-      // if(t==2){
-        // previous_target = target;
-      // }
-      // target = M_PI/2;
-    // }
-    // if(t > 4){
-      // if(t==4){
-        // previous_target = target;
-      // }
-      // target = M_PI;
-    // }
-    // if(t > 6){
-      // if(t==6){
-        // previous_target = target;
-      // }
-      // target = -M_PI/2;
-    // }
-    // if(t > 8){
-      // if(t==8){
-        // previous_target = target;
-      // }
-      // target = 0;
-      // t=0;
-    // }
-    
+    identified_curve_time += (double)TIME_STEP / 1000.0;
     
   }
 
