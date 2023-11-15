@@ -21,7 +21,7 @@ Este projeto Micromouse é desenvolvido em Webots e inclui implementações de c
 #### Mudanças
 
 - Adição do algoritmo anticolisão (anti_colision.cpp) que utiliza apenas informações dos sensores ultrassônicos para manter o robô no centro do caminho.
-- Integração do algoritmo anticolisão ao algoritmo geral (maze_solution_algorithm.cpp), representado por três estados conforme definido no diagrama de estados ![Diagrama de Estados](Imagens/Diagrama_de_estados_Integrador_II.png).
+- Integração do algoritmo anticolisão ao algoritmo geral (maze_solution_algorithm.cpp), representado por três estados conforme definido no diagrama de estados ![Diagrama de Estados](Imagens/v1_diagrama_de_estados.png).
   - **Anticolisão:** Utiliza informações dos sensores ultrassônicos para manter o robô no centro do caminho. Parte do código também define a direção a ser virada.
   - **Pra Frente:** Parte do código sem controle que faz o robô avançar por um período de tempo determinado.
   - **Virar:** Implementação de PID que utiliza o giroscópio para girar o robô no próprio eixo.
