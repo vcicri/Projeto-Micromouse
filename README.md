@@ -4,6 +4,16 @@ Este projeto Micromouse é desenvolvido em Webots e inclui implementações de c
 
 ## Versões
 
+### Versão 6.1.5.1
+
+- Data: 15/11/2023
+
+#### Mudanças
+
+- Ajustes finos nos parâmetros do temporizador.
+- Reorganização do código no maze_solution_algorithm.cpp.
+- Atualização do diagrama de estados conforme ![Diagrama de Estados](Imagens/Diagrama_de_estados_documento.png).
+
 ### Versão 6.0.5.1
 
 - Data: 12/11/2023

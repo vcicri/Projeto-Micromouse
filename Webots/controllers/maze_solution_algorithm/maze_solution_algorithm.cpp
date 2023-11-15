@@ -4,7 +4,7 @@
 #include <webots/DistanceSensor.hpp>
 #include <cmath>
 
-#define TIME_STEP 64
+#define TIME_STEP 16
 
 using namespace webots;
 
@@ -59,16 +59,23 @@ double selectDirection(double current_target){
   return final_direction; 
 }
 
-void consolePrint(double t_, double turning_delay_, double identified_curve_time_, double step_, double new_direction_, double error_, double error_sensors_, double Kp_){
+void consolePrint(double t_, double turning_delay_, double identified_curve_time_, double step_, double next_step_, double new_direction_, double error_, double error_sensors_, double Kp_){
 
     std::cout << "-----------------------------------------------------------------" << std::endl;
     std::cout << "t: " << t_ << ", t_delay: " << turning_delay_ << ", t_id: " << identified_curve_time_;
     if(step_ == CURVE){
-      std::cout << ", step: CURVE" << std::endl;
+      std::cout << ", step: CURVE";
     }else if(step_ == RUN){
-      std::cout << ", step: RUN" << std::endl;
+      std::cout << ", step: RUN";
     }else if(step_ == ANTICOLISION){
-      std::cout << ", step: ANTICOLISION" << std::endl;
+      std::cout << ", step: ANTICOLISION";
+    }
+    if(next_step_ == CURVE){
+      std::cout << ", next_step: CURVE" << std::endl;
+    }else if(next_step_ == RUN){
+      std::cout << ", next_step: RUN" << std::endl;
+    }else if(next_step_ == ANTICOLISION){
+      std::cout << ", next_step: ANTICOLISION" << std::endl;
     }
     
     std::cout << "Target: " << target << ", P_target: " << previous_target << " rad, orientation: " << orientation << " rad, new_dire: " << new_direction_ << " rad"<< std::endl;
@@ -119,7 +126,7 @@ int main() {
       std::cout << "target: " << target << std::endl;
       target = selectDirection(target);
       std::cout << "target após selectDirection: " << target << std::endl;
-      consolePrint(t, turning_delay, identified_curve_time, step, new_direction, error, error_sensors, Kp);
+      consolePrint(t, turning_delay, identified_curve_time, step, next_step, new_direction, error, error_sensors, Kp);
     }
     
     
@@ -127,7 +134,7 @@ int main() {
     if(step == RUN){
     
       if(next_step == CURVE){
-        run_delay = 0.85;
+        run_delay = 0.95;
       }else{
         run_delay = 0.85;
       }
@@ -170,10 +177,9 @@ int main() {
       proportional = Kp * error;
       right_speed = base_speed + proportional + integral;
       left_speed = base_speed - proportional - integral; 
-      
+      next_step = ANTICOLISION;
       if(abs(error) < 0.01){
         step = RUN;
-        next_step = ANTICOLISION;
         turning_delay = 0;
         
         orientation=0;
@@ -206,12 +212,13 @@ int main() {
       }else{
         new_direction = M_PI;
       }
-      std::cout << "--target: " << target << ", new_direction: " << new_direction << std::endl;
+      
+      next_step = CURVE;
+      //std::cout << "--target: " << target << ", new_direction: " << new_direction << std::endl;
       if(target != new_direction){
         turning_delay = 0;
         step = RUN;
         target = new_direction;
-        next_step = CURVE;
         right_speed = base_speed;
         left_speed = base_speed; 
         // identified_curve_time = t - 1.0;
@@ -265,7 +272,7 @@ int main() {
       motor1->setVelocity(right_speed);
     }
     
-    consolePrint(t, turning_delay, identified_curve_time, step, new_direction, error, error_sensors, Kp);   
+    consolePrint(t, turning_delay, identified_curve_time, step, next_step, new_direction, error, error_sensors, Kp);   
     t += (double)TIME_STEP / 1000.0;
     turning_delay += (double)TIME_STEP / 1000.0;
     identified_curve_time += (double)TIME_STEP / 1000.0;
