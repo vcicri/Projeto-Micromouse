@@ -4,6 +4,15 @@ Este projeto Micromouse é desenvolvido em Webots e inclui implementações de c
 
 ## Versões
 
+### Versão 6.2.0.1
+
+- Data: 15/11/2023
+
+#### Mudanças
+
+- Adição de funções para teste de sensor de linha.
+- Implementação de uma função para integrar o sensor de linha ao robô.
+
 ### Versão 6.1.5.1
 
 - Data: 15/11/2023
