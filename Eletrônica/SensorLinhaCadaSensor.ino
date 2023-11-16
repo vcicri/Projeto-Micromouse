@@ -3,7 +3,6 @@ const int pino2 = A1;
 const int pino3 = A4;
 const int pino4 = A5;
 
-
 void setup(){
   Serial.begin(9600); //INICIALIZAÇÃO DA SERIAL
    pinMode(pino1, INPUT); //DEFINE O PINO COMO ENTRADA
